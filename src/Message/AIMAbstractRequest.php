@@ -100,6 +100,31 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->getDeveloperMode() ? $this->getDeveloperEndpoint() : $this->getLiveEndpoint();
     }
 
+        //Getters and setters for 3ds params
+    /**
+     * Returns ECI for Credit card authentication
+     * @return string|null
+     */
+    public function getEci(){
+        $eci = $this->getParameter('eci');
+        return $eci ? $eci : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCavv(){
+        $cavv = $this->getParameter('cavv');
+        return $cavv ? $cavv : null;
+    }
+
+    public function setEci($value){
+        return $this->setParameter('eci',$value);
+    }
+
+    public function setCavv($value){
+        return $this->setParameter('cavv',$value);
+    }
     /**
      * @return TransactionReference
      */

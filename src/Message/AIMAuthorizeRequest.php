@@ -19,6 +19,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $this->addPayment($data);
         $this->addBillingData($data);
         $this->addCustomerIP($data);
+        $this->add3dSecureData($data);
         $this->addTransactionSettings($data);
 
         return $data;
@@ -33,6 +34,23 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $data->transactionRequest->payment->creditCard->cardNumber = $card->getNumber();
         $data->transactionRequest->payment->creditCard->expirationDate = $card->getExpiryDate('my');
         $data->transactionRequest->payment->creditCard->cardCode = $card->getCvv();
+    }
+    /**
+     * Adds 3dSecure values to data object
+     *
+     * @param \SimpleXMLElement $data
+     * @return \SimpleXMLElement
+     */
+    protected function add3dSecureData(\SimpleXMLElement $data)
+    {
+        /**
+         * @var CreditCard $card
+         */
+        if ($card = $this->getCard()) {
+            $data->transactionRequest->cardholderAuthentication->authenticationIndicator = $this->getEci();
+            $data->transactionRequest->cardholderAuthentication->cardholderAuthenticationValue = $this->getCavv();
+        }
+        return $data;
     }
 
     protected function addCustomerIP(\SimpleXMLElement $data)
